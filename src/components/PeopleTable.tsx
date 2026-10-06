@@ -2,7 +2,7 @@ import React from 'react';
 import { Person } from '../types';
 import cn from 'classnames';
 import { SearchLink } from './SearchLink';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams, useParams, Link } from 'react-router-dom';
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 type Props = {
@@ -21,7 +21,7 @@ type PersonRowProps = {
   mother: Person | null;
   father: Person | null;
   isSelected: boolean;
-  searchSuffix: string;
+  search: string;
 };
 
 const PersonRow: React.FC<PersonRowProps> = ({
@@ -29,7 +29,7 @@ const PersonRow: React.FC<PersonRowProps> = ({
   mother,
   father,
   isSelected,
-  searchSuffix,
+  search,
 }) => {
   const renderParent = (
     parent: Person | null,
@@ -37,12 +37,12 @@ const PersonRow: React.FC<PersonRowProps> = ({
   ) => {
     if (parent) {
       return (
-        <a
+        <Link
           className={cn({ 'has-text-danger': parent.sex === 'f' })}
-          href={'#/people/' + parent.slug}
+          to={{ pathname: `/people/${parent.slug}`, search }}
         >
           {parent.name}
-        </a>
+        </Link>
       );
     }
 
@@ -55,12 +55,12 @@ const PersonRow: React.FC<PersonRowProps> = ({
       className={cn({ 'has-background-warning': isSelected })}
     >
       <td>
-        <a
+        <Link
           className={cn({ 'has-text-danger': person.sex === 'f' })}
-          href={'#/people/' + person.slug + searchSuffix}
+          to={{ pathname: `/people/${person.slug}`, search }}
         >
           {person.name}
-        </a>
+        </Link>
       </td>
       <td>{person.sex}</td>
       <td>{person.born}</td>
@@ -77,9 +77,6 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
 
   const sort = searchParams.get('sort');
   const order = searchParams.get('order');
-
-  const search = searchParams.toString();
-  const searchSuffix = search ? `?${search}` : '';
 
   const peopleByName = new Map(people.map(person => [person.name, person]));
 
@@ -143,7 +140,7 @@ export const PeopleTable: React.FC<Props> = ({ people }) => {
               mother={mother}
               father={father}
               isSelected={person.slug === slug}
-              searchSuffix={searchSuffix}
+              search={searchParams.toString()}
             />
           );
         })}

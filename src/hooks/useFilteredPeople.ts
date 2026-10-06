@@ -19,7 +19,7 @@ export const useFilteredPeople = (people: Person[]) => {
           field?.toLowerCase().includes(query),
         );
 
-      const birthCentury = String(Math.floor(person.born / 100) + 1);
+      const birthCentury = String(Math.ceil(person.born / 100));
       const matchesCentury =
         centuries.length === 0 || centuries.includes(birthCentury);
 

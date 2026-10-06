@@ -10,11 +10,9 @@ export const PeopleFilters = () => {
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
 
-    setSearchParams(
-      getSearchWith(searchParams, {
-        query: value || null,
-      }),
-    );
+    setSearchParams(getSearchWith(searchParams, { query: value || null }), {
+      replace: true,
+    });
   };
 
   const centuries = searchParams.getAll('centuries');
@@ -102,9 +100,15 @@ export const PeopleFilters = () => {
       </div>
 
       <div className="panel-block">
-        <a className="button is-link is-outlined is-fullwidth" href="#/people">
+        <SearchLink
+          className="button is-link is-outlined is-fullwidth"
+          params={{ sex: null, query: null, centuries: null }}
+        >
           Reset all filters
-        </a>
+        </SearchLink>
+        {/* <a className="button is-link is-outlined is-fullwidth" href="#/people">
+          Reset all filters
+        </a> */}
       </div>
     </nav>
   );
